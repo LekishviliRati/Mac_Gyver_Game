@@ -2,6 +2,8 @@
 this is a doctring. i'm here to explain what the following code will do.
 oh, i'm multiline too!
 """
+import numpy as np
+import random
 
 # OPEN .TXT FILE 
 
@@ -19,23 +21,182 @@ def read_maze_txt(maze):
 			two_dimensions_list.append(list_letter)
 		return two_dimensions_list
 
-two_dimensions_list = read_maze_txt("maze_structure.txt")
-print(two_dimensions_list)
 
-#print(two_dimensions_list[14][8])
+two_dimensions_list = read_maze_txt("maze_structure.txt")
+print("This is two dimensional list", two_dimensions_list)
+
+#print(two_dimensions_list[0][0])
 
 
 def find_mg_position(search_area):
 	# Find Mac Gyver position represented by S in our two dimensional list 
 	a = search_area
 	x = [line for line in a if "S" in line][0]
-	#NOTE PERSO : 
+	#NOTE PERSO :
 	# Dénition de la variable x pour chercher la position de "S" sur l'axe des abscisses, sur chaque ligne du tableau
 	#[0] est le paramètre d'initialisation, à remplacer par la valeur x trouvée pour "S"
-	return (a.index(x), x.index("S"))
+	position = (a.index(x), x.index("S"))
+	return position
 	#NOTE PERSO
 	# a.index(x): Identification de la position de "S" sur l'axe des abcsisses grace à la fonction .index()
 	# x.index("S") : Identification de la position de "S" sur l'axe des ordonnées avec fonction .index()
 
 mac_gyver_position = find_mg_position(two_dimensions_list)
 print("Mac Gyver Position is :", mac_gyver_position)
+
+
+def count_free_spaces(search_area):
+	""" This fonction will return sum of free spaces inside a given maze"""
+	a = search_area
+	total_of_free_spaces = 0
+	empty_space = "R"
+	
+	for line in a:
+		# NOTE PERSO : pour une liste dans la liste de listes 
+		for unit_value in line:
+			# NOTE PERSO : pour une une valeur dans une liste
+			if empty_space in unit_value: 
+				# NOTE PERSO : si cette valeur est égal à "R"
+				total_of_free_spaces = total_of_free_spaces + 1
+	return total_of_free_spaces
+
+
+free_spaces = count_free_spaces(two_dimensions_list)
+print("Inside this list, there is", free_spaces, "empty spaces")
+
+
+def free_spaces_list(search_area):
+	# This fonctionne will list free cases positions inside a list
+
+	a = search_area
+	r = "R"
+	array = np.array(a)
+	free_spaces_array = np.argwhere(array == r)
+
+	return free_spaces_array
+
+
+free_spaces_positions = free_spaces_list(two_dimensions_list)
+print("Free spaces Positions are :", free_spaces_positions)
+
+#-------------------------------------------------------------------------------#
+# Essayé de retourner une liste de positions (en liste pas en tuple)
+#-------------------------------------------------------------------------------#
+
+# --> Dans cette fonction j'ai les 121 espaces libre mais je n'ai su trouvé l'indice 
+# autrement que par la fonction index() qui malheureusement renvoie un tuple
+
+# def free_spaces_list(search_area):
+
+# 	a = search_area
+# 	x = 0
+# 	y = 0
+# 	free_spaces_list = []
+# 	empty = "R"
+
+# 	for row in a:
+# 		x = row
+# 		for col in row:
+# 			y = col
+# 			if empty in col:
+# 				print(empty)
+# 				free_spaces_list.append(empty)
+# 	print(free_spaces_list)
+
+
+# print(free_spaces_list(two_dimensions_list))
+
+#-------------------------------------------------------------------------------#
+
+#-------------------------------------------------------------------------------#
+# Essayé de retourner une liste de positions (en liste pas en tuple)
+# Problème me retourne seulement la position x, y de la première valeur trouvée
+#-------------------------------------------------------------------------------#
+# 	a = search_area
+# 	free_spaces_list = []
+
+# 	x = [line for line in a if "R" in line][0]
+# 	position = [a.index(x), x.index("R")]
+
+# 	free_spaces_list.append(position)
+
+# 	return free_spaces_list
+
+# #fs_list = free_spaces_list(two_dimensions_list) 
+# #print("Free spaces list: ", fs_list)
+
+#-------------------------------------------------------------------------------#
+
+
+
+def random_choice_in_free_spaces_list(search_area):
+	#This fonctionne will list free cases positions inside a list
+
+	s = free_spaces_list(two_dimensions_list)
+	# Save in a variable all free spaces available
+
+	if free_spaces > 3:
+		# If there is more than 3 free spaces
+		#print("yes there is more than 3 empty spaces")
+		# Check if we are in our condition
+		random_choice = random.choice(s)
+		# random choice inside free spaces list
+		return random_choice
+
+#free_spaces = "Random choice is : ", random_choice_in_free_spaces_list(two_dimensions_list)
+#print(free_spaces)
+
+
+def insert_objects_in_maze(search_area):
+
+	a = search_area
+
+	aiguille_position = random_choice_in_free_spaces_list(two_dimensions_list)
+	tube_position = random_choice_in_free_spaces_list(two_dimensions_list)
+	ether_position  = random_choice_in_free_spaces_list(two_dimensions_list)
+
+	print("tube: ", tube_position, "ether: ", ether_position, "aiguille", aiguille_position)
+
+	
+	x_aiguille = aiguille_position[0]
+	y_aiguille = aiguille_position[1]
+	a[x_aiguille][y_aiguille] = "1"
+
+	x_tube = tube_position[0]
+	y_tube = tube_position[1]
+	a[x_tube][y_tube] = "2"
+
+	x_ether = ether_position[0]
+	y_ether = ether_position[1]
+	a[x_ether][y_ether] = "3"
+
+
+	return a
+
+
+object_added_maze = insert_objects_in_maze(two_dimensions_list)
+print("Obeject added maze : ", object_added_maze)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
