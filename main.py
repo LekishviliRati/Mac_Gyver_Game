@@ -5,7 +5,7 @@ oh, i'm multiline too!
 import numpy as np
 import random
 
-# OPEN .TXT FILE 
+
 
 def read_maze_txt(maze):
 	two_dimensions_list = []
@@ -22,8 +22,8 @@ def read_maze_txt(maze):
 		return two_dimensions_list
 
 
-two_dimensions_list = read_maze_txt("maze_structure.txt")
-print("This is two dimensional list", two_dimensions_list)
+#two_dimensions_list = read_maze_txt("maze_structure.txt")
+#print("This is two dimensional list", two_dimensions_list)
 
 #print(two_dimensions_list[0][0])
 
@@ -41,8 +41,8 @@ def find_mg_position(search_area):
 	# a.index(x): Identification de la position de "S" sur l'axe des abcsisses grace à la fonction .index()
 	# x.index("S") : Identification de la position de "S" sur l'axe des ordonnées avec fonction .index()
 
-mac_gyver_position = find_mg_position(two_dimensions_list)
-print("Mac Gyver Position is :", mac_gyver_position)
+#mac_gyver_position = find_mg_position(two_dimensions_list)
+#print("Mac Gyver Position is :", mac_gyver_position)
 
 
 def count_free_spaces(search_area):
@@ -61,8 +61,8 @@ def count_free_spaces(search_area):
 	return total_of_free_spaces
 
 
-free_spaces = count_free_spaces(two_dimensions_list)
-print("Inside this list, there is", free_spaces, "empty spaces")
+#free_spaces = count_free_spaces(two_dimensions_list)
+#print("Inside this list, there is", free_spaces, "empty spaces")
 
 
 def free_spaces_list(search_area):
@@ -76,8 +76,8 @@ def free_spaces_list(search_area):
 	return free_spaces_array
 
 
-free_spaces_positions = free_spaces_list(two_dimensions_list)
-print("Free spaces Positions are :", free_spaces_positions)
+#free_spaces_positions = free_spaces_list(two_dimensions_list)
+#print("Free spaces Positions are :", free_spaces_positions)
 
 #-------------------------------------------------------------------------------#
 # Essayé de retourner une liste de positions (en liste pas en tuple)
@@ -155,7 +155,7 @@ def insert_objects_in_maze(search_area):
 	tube_position = random_choice_in_free_spaces_list(two_dimensions_list)
 	ether_position  = random_choice_in_free_spaces_list(two_dimensions_list)
 
-	print("tube: ", tube_position, "ether: ", ether_position, "aiguille", aiguille_position)
+	print( "aiguille", aiguille_position, "tube: ", tube_position, "ether: ", ether_position)
 
 	
 	x_aiguille = aiguille_position[0]
@@ -174,14 +174,418 @@ def insert_objects_in_maze(search_area):
 	return a
 
 
+#object_added_maze = insert_objects_in_maze(two_dimensions_list)
+#print("Obeject added maze : ", object_added_maze)
+
+def objects_collection(obj):
+	collected_objects_list = [] 
+	added_object = obj
+
+	total_objects = collected_objects_list.append(added_object)
+
+	return total_objects
+
+
+
+def move_right(search_area):
+	a = search_area
+	mg_initial_positions = find_mg_position(a)
+	mg_position_x = mg_initial_positions[0]
+	mg_position_y = mg_initial_positions[1]
+
+
+	if mg_position_y+1 in range(15):
+		target_position = a[mg_position_x][mg_position_y+1]
+		if target_position == "R":
+			mg_position_y = mg_position_y +1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x][mg_position_y-1] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			return new_mg_position
+		if target_position == "W":
+			print("Vous ne pouvez traverser les murs ! ")
+		if target_position == "1":
+			mg_position_y = mg_position_y +1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x][mg_position_y-1] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[0] = "AIGUILLE"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "2":
+			mg_position_y = mg_position_y +1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x][mg_position_y-1] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[1] = "TUBE"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "3":
+			mg_position_y = mg_position_y +1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x][mg_position_y-1] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[2] = "ETHER"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "E":
+			mg_position_y = mg_position_y -1
+			if found_objects == weapon:
+				a[mg_position_x][mg_position_y] = "S"
+				a[mg_position_x][mg_position_y+1] = "R"
+				#NOTE PERSO : permet de déplacer S vers la gauche et replacer la case qui contenait S par R. 			
+				new_mg_position = find_mg_position(two_dimensions_list)
+				print(a)
+				print("Tous les objets ont été récoltés, vous avez GAGNÉ")
+				return new_mg_position
+			elif found_objects != weapon:
+				a[mg_position_x][mg_position_y] = "S"
+				a[mg_position_x][mg_position_y+1] = "R"
+				new_mg_position = find_mg_position(two_dimensions_list)
+				print(a)
+				print("Vous avez perdu, le gardien vous a capturé")
+				return new_mg_position								
+	else:
+		print("Mg cannot leave the maze")
+	return a
+
+###############################################################################################
+
+# !!!! Problème avec ce code : quand MG a comme target_position y > 14 le jeux plante !!!!
+
+###############################################################################################
+	# if target_position == "R":
+	# 	mg_position_y = mg_position_y +1
+	# 	if mg_position_y in range(15):
+	# 		# MG stays in maze, can't go out of it by left side
+	# 		a[mg_position_x][mg_position_y] = "S"
+	# 		a[mg_position_x][mg_position_y-1] = "R"
+	# 		#NOTE PERSO : permet de déplacer S vers la gauche et replacer la case qui contenait S par R. 
+	# 		new_mg_position = find_mg_position(two_dimensions_list)
+	# 		print(a)
+	# 		return new_mg_position
+	# 	else : 
+	# 		print("Mg cannot leave the maze")
+	# 	return a
+
+###############################################################################################
+
+	# if target_position == "W":
+	# 	return "Vous ne pouvez passer, car il y a un mur"
+
+###############################################################################################
+
+	# if target_position == "1":
+	# 	mg_position_y = mg_position_y +1
+	# 	if mg_position_y in range(15):
+	# 		# MG stays in maze, can't go out of it by right side
+	# 		a[mg_position_x][mg_position_y] = "S"
+	# 		a[mg_position_x][mg_position_y-1] = "R"
+	# 		#NOTE PERSO : permet de déplacer S vers la droite et replacer la case qui contenait S par R.
+	# 		new_mg_position = find_mg_position(two_dimensions_list)
+	# 		print(a)
+	# 		found_objects[0] = "AIGUILLE"
+	# 		print(found_objects)
+	# 		return new_mg_position
+	# 	else :
+	# 		print("Mg cannot leave the maze")	
+
+	# if target_position == "2":
+	# 	mg_position_y = mg_position_y +1
+	# 	if mg_position_y in range(15):
+	# 		# MG stays in maze, can't go out of it by right side
+	# 		a[mg_position_x][mg_position_y] = "S"
+	# 		a[mg_position_x][mg_position_y-1] = "R"
+	# 		#NOTE PERSO : permet de déplacer S vers la droite et replacer la case qui contenait S par R.
+	# 		new_mg_position = find_mg_position(two_dimensions_list)
+	# 		print(a)
+	# 		found_objects[1] = "TUBE"
+	# 		print(found_objects)			
+	# 		return new_mg_position
+	# 	else :
+	# 		print("Mg cannot leave the maze")	
+
+	# if target_position == "3":
+	# 	mg_position_y = mg_position_y +1
+	# 	if mg_position_y in range(15):
+	# 		# MG stays in maze, can't go out of it by right side
+	# 		a[mg_position_x][mg_position_y] = "S"
+	# 		a[mg_position_x][mg_position_y-1] = "R"
+	# 		#NOTE PERSO : permet de déplacer S vers la droite et replacer la case qui contenait S par R.
+	# 		new_mg_position = find_mg_position(two_dimensions_list)
+	# 		print(a)
+	# 		found_objects[2] = "ETHER"
+	# 		print(found_objects)
+	# 		return new_mg_position
+	# 	else :
+	# 		print("Mg cannot leave the maze")	
+
+#print(move_right(two_dimensions_list, mac_gyver_position))
+#print(move_right(two_dimensions_list, mac_gyver_position))
+###############################################################################################
+
+def move_left(search_area):
+	a = search_area
+	mg_initial_positions = find_mg_position(a)
+	mg_position_x = mg_initial_positions[0]
+	mg_position_y = mg_initial_positions[1]
+	
+
+	if mg_position_y-1 in range(15):
+		target_position = a[mg_position_x][mg_position_y-1]
+		if target_position == "R":
+			mg_position_y = mg_position_y -1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x][mg_position_y+1] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			return new_mg_position
+		if target_position == "W":
+			print("Vous ne pouvez traverser les murs ! ")
+		if target_position == "1":
+			mg_position_y = mg_position_y -1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x][mg_position_y+1] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[0] = "AIGUILLE"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "2":
+			mg_position_y = mg_position_y -1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x][mg_position_y+1] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[1] = "TUBE"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "3":
+			mg_position_y = mg_position_y -1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x][mg_position_y+1] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[2] = "ETHER"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "E":
+			mg_position_y = mg_position_y -1
+			if found_objects == weapon:
+				a[mg_position_x][mg_position_y] = "S"
+				a[mg_position_x][mg_position_y+1] = "R"
+				#NOTE PERSO : permet de déplacer S vers la gauche et replacer la case qui contenait S par R. 			
+				new_mg_position = find_mg_position(two_dimensions_list)
+				print(a)
+				print("Tous les objets ont été récoltés, vous avez GAGNÉ")
+				return new_mg_position
+			elif found_objects != weapon:
+				a[mg_position_x][mg_position_y] = "S"
+				a[mg_position_x][mg_position_y+1] = "R"
+				new_mg_position = find_mg_position(two_dimensions_list)
+				print(a)
+				print("Vous avez perdu, le gardien vous a capturé")
+				return new_mg_position
+	else:
+		print("Mg cannot leave the maze")
+	return a
+
+###############################################################################################
+	# if target_position == "E":
+	# 	mg_position_y = mg_position_y -1
+	# 	if mg_position_y in range(15):
+	# 		if found_objects == weapon:
+	# 			a[mg_position_x][mg_position_y] = "S"
+	# 			a[mg_position_x][mg_position_y+1] = "R"
+	# 			#NOTE PERSO : permet de déplacer S vers la gauche et replacer la case qui contenait S par R. 			
+	# 			new_mg_position = find_mg_position(two_dimensions_list)
+	# 			print(a)
+	# 			print("Tous les objets ont été récoltés, vous avez GAGNÉ")
+	# 			return new_mg_position
+	# 		elif found_objects != weapon:
+	# 			a[mg_position_x][mg_position_y] = "S"
+	# 			a[mg_position_x][mg_position_y+1] = "R"
+	# 			new_mg_position = find_mg_position(two_dimensions_list)
+	# 			print(a)
+	# 			print("Vous avez perdu, le gardien vous a capturé")
+	# 			return new_mg_position
+
+###############################################################################################
+
+def move_up(search_area):
+	a = search_area
+	mg_initial_positions = find_mg_position(a)
+	mg_position_x = mg_initial_positions[0]
+	mg_position_y = mg_initial_positions[1]
+
+	if mg_position_x-1 in range(15):
+		target_position = a[mg_position_x-1][mg_position_y]
+		if target_position == "R":
+			mg_position_x = mg_position_x -1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x+1][mg_position_y] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			return new_mg_position
+		if target_position == "W":
+			print("Vous ne pouvez traverser les murs ! ")
+		if target_position == "1":
+			mg_position_x = mg_position_x -1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x+1][mg_position_y] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[0] = "AIGUILLE"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "2":
+			mg_position_x = mg_position_x -1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x+1][mg_position_y] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[1] = "TUBE"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "3":
+			mg_position_x = mg_position_x -1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x+1][mg_position_y] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[2] = "ETHER"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "E":
+			mg_position_x = mg_position_x -1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x+1][mg_position_y] = "R"
+			if found_objects == weapon:
+				new_mg_position = find_mg_position(two_dimensions_list)			
+				print(a)
+				print("Tous les objets ont été récoltés, vous avez GAGNÉ")
+				return new_mg_position
+			elif found_objects != weapon:
+				new_mg_position = find_mg_position(two_dimensions_list)
+				print(a)
+				print("Vous avez perdu, le gardien vous a capturé")
+				return new_mg_position
+	else:
+		print("Mg cannot leave the maze")
+	return a	
+
+
+
+def move_down(search_area):
+	a = search_area
+	mg_initial_positions = find_mg_position(a)
+	mg_position_x = mg_initial_positions[0]
+	mg_position_y = mg_initial_positions[1]
+	
+	if mg_position_x+1 in range(15):
+		target_position = a[mg_position_x+1][mg_position_y]
+		if target_position == "R":
+			mg_position_x = mg_position_x +1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x-1][mg_position_y] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			return new_mg_position
+		if target_position == "W":
+			print("Vous ne pouvez traverser les murs ! ")
+		if target_position == "1":
+			mg_position_x = mg_position_x +1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x-1][mg_position_y] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[0] = "AIGUILLE"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "2":
+			mg_position_x = mg_position_x +1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x-1][mg_position_y] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[1] = "TUBE"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "3":
+			mg_position_x = mg_position_x +1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x-1][mg_position_y] = "R"
+			new_mg_position = find_mg_position(two_dimensions_list)
+			print(a)
+			found_objects[2] = "ETHER"
+			print(found_objects)
+			return new_mg_position
+		if target_position == "E":
+			mg_position_x = mg_position_x +1
+			a[mg_position_x][mg_position_y] = "S"
+			a[mg_position_x-1][mg_position_y] = "R"
+			if found_objects == weapon:
+				new_mg_position = find_mg_position(two_dimensions_list)			
+				print(a)
+				print("Tous les objets ont été récoltés, vous avez GAGNÉ")
+				return new_mg_position
+			elif found_objects != weapon:
+				new_mg_position = find_mg_position(two_dimensions_list)
+				print(a)
+				print("Vous avez perdu, le gardien vous a capturé")
+				return new_mg_position
+	else:
+		print("Mg cannot leave the maze")
+	return a	
+
+
+
+
+
+###################### GAME ######################
+
+mg_new_positions = (0, 0)
+end_positions = (14, 8)
+two_dimensions_list = read_maze_txt("maze_structure.txt")
+mac_gyver_position = find_mg_position(two_dimensions_list)
+free_spaces = count_free_spaces(two_dimensions_list)
+free_spaces_positions = free_spaces_list(two_dimensions_list)
 object_added_maze = insert_objects_in_maze(two_dimensions_list)
-print("Obeject added maze : ", object_added_maze)
+found_objects = [" ", " ", " "]
+weapon = ['AIGUILLE', 'TUBE', 'ETHER']
 
 
+print(object_added_maze)
+print("found_objects: ", found_objects)
 
 
+while mg_new_positions != end_positions:
+	direction = input("Indiquez une direction: ")
+	if direction == "r":
+ 		mg_new_positions = move_right(two_dimensions_list)
+
+	if direction == "l":
+ 		mg_new_positions = move_left(two_dimensions_list)
+
+	if direction == "u":
+ 		mg_new_positions = move_up(two_dimensions_list)
+
+	if direction == "d":
+ 		mg_new_positions = move_down(two_dimensions_list)
+
+	if direction == "e":
+		# STOP playing
+		break
 
 
+print("FIN !")
+
+
+###################### GAME ######################
 
 
 
