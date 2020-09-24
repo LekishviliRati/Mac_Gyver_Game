@@ -1,155 +1,135 @@
 from configuration import *
 from back_end import Character
 from random import randint
+import pygame
+pygame.init()
+
 
 class Map:
 
     def __init__(self, player):
         self.maze = []
-        self.isPlayable = True
+        self.is_playable = True
         self.character = player
         self.read_maze_txt()
         self.find_player_position()
         self.set_objects()
         self.display_map()
         self.objects = self.character.objects
-        #AJOUT
         self.end_position = (0, 0)
         self.find_end_position()
-
+        self.end = False
 
     def read_maze_txt(self):
         two_dimensions_list = []
-        with open(configFile, "r") as file:
+        with open(config_file, "r") as file:
             txt_reading = file.read().splitlines()
             for line in txt_reading:
                 list_letter = [i for i in line]
                 two_dimensions_list.append(list_letter)
             self.maze = two_dimensions_list
-            #print("Le lab est stocké")
 
+    # For clear display in terminal
     def display_map(self):
-        for x in range(maxX):
+        for x in range(max_x):
             print(self.maze[x])
 
     def find_player_position(self):
-        for x in range(maxX):
-            for y in range(maxY):
-                if self.maze[x][y] is letterOfCharacter:
-                    #print("Le personage est en position", x, y)
-                    self.character.setCoordinates(x, y)
-    # AJOUT
+        for x in range(max_x):
+            for y in range(max_y):
+                if self.maze[x][y] is letter_of_character:
+                    self.character.set_coordinates(x, y)
+
     def find_end_position(self):
-        for x in range(maxX):
-            for y in range(maxY):
-                if self.maze[x][y] is letterForEnding:
+        for x in range(max_x):
+            for y in range(max_y):
+                if self.maze[x][y] is letter_for_ending:
                     self.end_position = (x, y)
 
+    # Set objects randomly
     def set_objects(self):
-        listOfFreePositions = []
-        numberOfObject = 1
+        list_of_positions = []
+        number_of_objects = 1
 
-        for x in range(maxX):
-            for y in range(maxY):
-                if self.maze[x][y] is letterForSpace:
-                    freePosition = (x, y)
-                    listOfFreePositions.append(freePosition)
-        totalFreeSpaces = len(listOfFreePositions) -1
-        if totalFreeSpaces >= maxObjects -1:
-            for i in range(maxObjects):
-                randomInt = randint(0, totalFreeSpaces)
-                object_coordinates = listOfFreePositions[randomInt]
-                listOfFreePositions.remove(object_coordinates)
-                totalFreeSpaces -= 1
+        for x in range(max_x):
+            for y in range(max_y):
+                if self.maze[x][y] is letter_for_space:
+                    free_position = (x, y)
+                    list_of_positions.append(free_position)
+        total_free_spaces = len(list_of_positions) - 1
+        if total_free_spaces >= max_objects - 1:
+            for i in range(max_objects):
+                # Use of random function
+                random_int = randint(0, total_free_spaces)
+                object_coordinates = list_of_positions[random_int]
+                list_of_positions.remove(object_coordinates)
+                total_free_spaces -= 1
                 x = object_coordinates[0]
                 y = object_coordinates[1]
-                self.maze[x][y] = numberOfObject
-                numberOfObject += 1
-                #self.display_map()
+                self.maze[x][y] = number_of_objects
+                number_of_objects += 1
 
-    def setMovement(self, inputType):
-        # On part du principe que inputType c'est la lettre envoyée par l'utilisateur
+    def set_movement(self, input_type):
         x = self.character.x
         y = self.character.y
 
-        inputMove = {
-            inputUp: {
+        input_move = {
+            input_up: {
                 "x": -1,
                 "y": 0
             },
-            inputDown: {
+            input_down: {
                 "x": +1,
                 "y": 0
             },
-            inputLeft: {
+            input_left: {
                 "x": 0,
                 "y": -1
             },
-            inputRight: {
+            input_right: {
                 "x": 0,
                 "y": +1
             },
 
         }
-        #print(inputMove)
-        #print(inputType)
-        if inputType in inputMove:
-            self.doMoovement(x + inputMove[inputType]["x"], y + inputMove[inputType]["y"])
+        if input_type in input_move:
+            self.do_movement(x + input_move[input_type]["x"], y + input_move[input_type]["y"])
         else:
-            print("Ne fonctionne pas")
+            print("Something wrong in set_movement function")
 
-
-    def doMoovement(self, newX, newY):
-        # Cette méthode met à jour la carte et bouge le personnage
-        # Indices  : self.character.moove(x, y)
-        # self.maze[x][y] = letterForSpace
-        # self.maze[newX][newY] = letterForCharacter
+    def do_movement(self, new_x, new_y):
         x = self.character.x
         y = self.character.y
 
-        if newX in range(maxX) and newY in range(maxY):
-            target_position = self.maze[newX][newY]
-            if target_position != letterForWalls:
-                if target_position == letterForSpace:
-                    #print("Target poisition", target_position)
-                    # self.maze[x][y] = letterForSpace
-                    # self.character.moove(newX, newY)
-                    # self.maze[newX][newY] = letterOfCharacter
-                    # self.find_player_position()
-                    # self.display_map()
-                    self.update_map(newX, newY)
-                if target_position == 1 or target_position == 2 or target_position == 3:
-                    # self.maze[x][y] = letterForSpace
-                    # self.character.moove(newX, newY)
-                    # self.maze[newX][newY] = letterOfCharacter
-                    # self.find_player_position()
-                    # self.display_map()
-                    self.update_map(newX, newY)
-                    #self.addObject() -> ne fontionne pas malgrès l'import de la classe Character depuis back_end
+        if new_x in range(max_x) and new_y in range(max_y):
+            target_position = str(self.maze[new_x][new_y])
+            if target_position != letter_for_walls:
+                if target_position == letter_for_space:
+                    self.update_map(new_x, new_y)
+                if target_position.isnumeric():
+                    self.update_map(new_x, new_y)
                     self.objects = self.objects + 1
-                    print("Self.Objects = ", self.objects)
-                if target_position == letterForEnding:
-                    # self.maze[x][y] = letterForSpace
-                    # self.character.moove(newX, newY)
-                    # self.maze[newX][newY] = letterOfCharacter
-                    # self.find_player_position()
-                    # self.display_map()
-                    self.update_map(newX, newY)
-                    if self.objects == maxObjects:
-                        print("Gagné !")
-                    if self.objects != maxObjects:
-                        print("Perdu :( ")
+                if target_position == letter_of_guard:
+                    if self.objects == max_objects:
+                        self.update_map(new_x, new_y)
+                        print("Guard is now sleeping !")
+                    if self.objects != max_objects:
+                        self.end = True
+                        print("You lose :( ")
+                if target_position == letter_for_ending:
+                    self.update_map(new_x, new_y)
+                    print("You Win !")
             else:
-                print("Impossible de passer à travers un mur ! ")
+                print("There is a wall you can't go that way ! ")
         else:
-            print("Ne peut pas sortir de la carte")
+            print("Player can't go out of the maze")
 
-    def update_map(self, newX, newY):
+    def update_map(self, new_x, new_y):
         x = self.character.x
         y = self.character.y
 
-        self.maze[x][y] = letterForSpace
-        self.character.moove(newX, newY)
-        self.maze[newX][newY] = letterOfCharacter
+        self.maze[x][y] = letter_for_space
+        self.character.move(new_x, new_y)
+        self.maze[new_x][new_y] = letter_of_character
         self.find_player_position()
         self.display_map()
