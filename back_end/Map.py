@@ -9,7 +9,6 @@ class Map:
 
     def __init__(self, player):
         self.maze = []
-        self.is_playable = True
         self.character = player
         self.read_maze_txt()
         self.find_player_position()
@@ -18,7 +17,7 @@ class Map:
         self.objects = self.character.objects
         self.end_position = (0, 0)
         self.find_end_position()
-        self.end = False
+        self.finish = "playing"
 
     def read_maze_txt(self):
         two_dimensions_list = []
@@ -29,7 +28,7 @@ class Map:
                 two_dimensions_list.append(list_letter)
             self.maze = two_dimensions_list
 
-    # For clear display in terminal
+    # Better display in terminal
     def display_map(self):
         for x in range(max_x):
             print(self.maze[x])
@@ -98,8 +97,6 @@ class Map:
             print("Something wrong in set_movement function")
 
     def do_movement(self, new_x, new_y):
-        x = self.character.x
-        y = self.character.y
 
         if new_x in range(max_x) and new_y in range(max_y):
             target_position = str(self.maze[new_x][new_y])
@@ -114,10 +111,11 @@ class Map:
                         self.update_map(new_x, new_y)
                         print("Guard is now sleeping !")
                     if self.objects != max_objects:
-                        self.end = True
+                        self.finish = "lose"
                         print("You lose :( ")
                 if target_position == letter_for_ending:
                     self.update_map(new_x, new_y)
+                    self.finish = "win"
                     print("You Win !")
             else:
                 print("There is a wall you can't go that way ! ")

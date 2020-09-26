@@ -1,3 +1,2 @@
-pylint
-numpy
 pygame
+flake8

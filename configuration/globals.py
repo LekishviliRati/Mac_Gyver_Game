@@ -24,7 +24,6 @@ input_right = "d"
 
 
 # Dimensions for the map
-
 min_y = 0
 max_y = 15
 min_x = 0
