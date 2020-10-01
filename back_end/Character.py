@@ -1,3 +1,7 @@
+"""
+Character class instantiates a player as a sprite.
+"""
+
 from configuration import *
 import pygame
 pygame.init()

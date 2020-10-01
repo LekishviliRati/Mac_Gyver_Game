@@ -1,2 +1,2 @@
 pygame
-flake8
+cx_Freeze

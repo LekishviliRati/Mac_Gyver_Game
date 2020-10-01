@@ -1,3 +1,8 @@
+"""
+Display class manages front end part of this game.
+It will initialize displays and update map after each event.
+"""
+
 from configuration import *
 from back_end import Map, Character
 import pygame

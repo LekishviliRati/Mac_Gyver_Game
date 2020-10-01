@@ -1,5 +1,11 @@
-from configuration import *
+"""
+Map class instantiates a given map from maze_structure.txt
+It manages back end part of this game :
+    read a given map, find player position, set movements ...
+"""
+
 from back_end import Character
+from configuration import *
 from random import randint
 import pygame
 pygame.init()

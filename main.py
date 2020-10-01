@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
+
 from front_end import *
-from back_end import *
 import pygame
 pygame.init()
 
