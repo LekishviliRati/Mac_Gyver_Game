@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+"""Configuration file"""
+
 import pygame
 pygame.init()
 
@@ -15,13 +18,11 @@ number_for_syringe = 1
 number_for_tube = 2
 number_for_ether = 3
 
-
 # Input for user to Use
 input_up = "z"
 input_down = "s"
 input_left = "q"
 input_right = "d"
-
 
 # Dimensions for the map
 min_y = 0
@@ -42,7 +43,6 @@ image_tube = pygame.image.load("assets/plastic_tube.png")
 image_ether = pygame.image.load("assets/ether_2.png")
 image_for_ending = pygame.image.load("assets/exit.png")
 
-
 # Display
 display_size = width, height = 480, 645
 display_width = 480
@@ -50,7 +50,6 @@ display_height = 645
 background_color = 84, 82, 89
 sprite_width = 32
 sprite_eight = 43
-
 
 # Colors
 GREY = (150, 150, 150)

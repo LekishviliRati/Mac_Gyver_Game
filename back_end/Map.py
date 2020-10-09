@@ -1,19 +1,26 @@
+# -*- coding: utf-8 -*-
+
 """
-Map class instantiates a given map from maze_structure.txt
-It manages back end part of this game :
+Map class instantiates a given map from maze_structure.txt.
+
+It also manages back end part of this game :
     read a given map, find player position, set movements ...
 """
 
-from back_end import Character
-from configuration import *
+from configuration import config_file, max_x, max_y, letter_of_character
+from configuration import max_objects, input_up, input_down, input_left
+from configuration import letter_of_guard, letter_for_space
+from configuration import letter_for_ending, input_right, letter_for_walls
 from random import randint
 import pygame
 pygame.init()
 
 
 class Map:
+    """Instantiate a map."""
 
     def __init__(self, player):
+        """Initialise Map class."""
         self.maze = []
         self.character = player
         self.read_maze_txt()
@@ -26,8 +33,12 @@ class Map:
         self.finish = "playing"
 
     def read_maze_txt(self):
+        """Read maze_structure.txt."""
         two_dimensions_list = []
         with open(config_file, "r") as file:
+            # with open("/Users/lekishvili/Desktop/OPENCLASSROOMS/"
+            #           "Projet_3/LIVRABLES/Mac_Gyver_Game/build/"
+            #           "Mac_Gyver_Game/maze_structure.txt") as file:
             txt_reading = file.read().splitlines()
             for line in txt_reading:
                 list_letter = [i for i in line]
@@ -36,16 +47,19 @@ class Map:
 
     # Better display in terminal
     def display_map(self):
+        """Better display of map in the terminal."""
         for x in range(max_x):
             print(self.maze[x])
 
     def find_player_position(self):
+        """Find player position."""
         for x in range(max_x):
             for y in range(max_y):
                 if self.maze[x][y] is letter_of_character:
                     self.character.set_coordinates(x, y)
 
     def find_end_position(self):
+        """Find end position."""
         for x in range(max_x):
             for y in range(max_y):
                 if self.maze[x][y] is letter_for_ending:
@@ -53,6 +67,7 @@ class Map:
 
     # Set objects randomly
     def set_objects(self):
+        """Use of randint to set objects randomly."""
         list_of_positions = []
         number_of_objects = 1
 
@@ -75,6 +90,7 @@ class Map:
                 number_of_objects += 1
 
     def set_movement(self, input_type):
+        """List of movement possibilities for user."""
         x = self.character.x
         y = self.character.y
 
@@ -98,12 +114,15 @@ class Map:
 
         }
         if input_type in input_move:
-            self.do_movement(x + input_move[input_type]["x"], y + input_move[input_type]["y"])
+            self.do_movement(
+                x + input_move[input_type]["x"],
+                y + input_move[input_type]["y"]
+            )
         else:
             print("Something wrong in set_movement function")
 
     def do_movement(self, new_x, new_y):
-
+        """Make moving action."""
         if new_x in range(max_x) and new_y in range(max_y):
             target_position = str(self.maze[new_x][new_y])
             if target_position != letter_for_walls:
@@ -129,6 +148,7 @@ class Map:
             print("Player can't go out of the maze")
 
     def update_map(self, new_x, new_y):
+        """Update player position in the map."""
         x = self.character.x
         y = self.character.y
 
